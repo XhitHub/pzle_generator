@@ -28,8 +28,12 @@ class Tele {
   }
 
   generatePrevStep(currState) {
-    // randomly create a mechanic of this type, with its attrs ics such that the pzle's prev step has its state results in currState with this mechanic instance involved
-    
+    /*
+    randomly create a mechanic of this type, with its attrs ics such that the pzle's prev step has its state results in currState with this mechanic instance involved
+    it is creating a step in a way in a path / reversedPath obj
+    it can simply return a prev step, and let the parent func to handle the building of the big path obj.
+      if prev step is given/obtained, building big path obj with the obtained prev step is same for any mechanics, thus should not be implemented in each mechanic individually
+    */
   }
 
   // class specific funcs

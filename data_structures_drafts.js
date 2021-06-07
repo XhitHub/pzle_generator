@@ -40,8 +40,16 @@ const stateSampleV1 = {
     // env of the pzle curr state
   }
 }
+
+// pzle: puzzle
 const pzleSampleV1 = {
   /*
+  needs / requirements for pzle obj
+    enough info for unty to generate gm
+      only start state is enough?
+        path is also needed if have func of [ reveal ans ]
+    prove that pzle can be solved?
+
   Path: poss path the gm may goes down, including the N diff solutions and M diff failures. Paths should be of tree structure, start at start state, diff user action executed lead to diff nextState and their next child tree of path
     data needed for unty to build the pzle and for match to start:
       actually only start state is needed. the whole path is only for showing that the pzle can be solved
@@ -49,7 +57,7 @@ const pzleSampleV1 = {
   */
   pathV1: {
     /*
-    controllable actions should simply be some facts and should not be distinguishly separated out?
+    controllable's actions should simply be some facts and should not be distinguishly separated out?
     */
     state: {
       // ...
@@ -82,6 +90,40 @@ const pzleSampleV1 = {
       },
       // ...
     ]
+  },
+
+  pathV2: {
+    // controllable's actions to be normal facts
+  },
+
+  reversedPathV1: {
+    // from end state to start state. this is obj that will be generated in [ generating sol from end state ]. forward version should can be generated from this
+    state: {
+      // ...
+    },
+    prevSteps: [
+      {
+        controllableActions: [
+          // it can be N controllables do diff actions to results in this next step
+          {
+            controllable: c1,
+            action: a1,
+          },
+          // ...
+        ],
+        prevStep: {
+          state: {},
+          prevSteps: []
+        }
+      }
+    ]
+  },
+
+  startState: {
+    // a state obj
+  },
+  currState: {
+    // a state obj
   }
 }
 class Pzle {
