@@ -44,6 +44,10 @@ const stateSampleV1 = {
 // pzle: puzzle
 const pzleSampleV1 = {
   /*
+  nature
+    gm use this pzle class obj too?
+      gm in unty probably have another gm obj containing curr state in C# instead.
+      this pzle class only serves for pzle generation and validation
   needs / requirements for pzle obj
     enough info for unty to generate gm
       only start state is enough?
@@ -99,6 +103,7 @@ const pzleSampleV1 = {
   reversedPathV1: {
     // from end state to start state. this is obj that will be generated in [ generating sol from end state ]. forward version should can be generated from this
     state: {
+      // id: s1
       // ...
     },
     prevSteps: [
@@ -112,7 +117,10 @@ const pzleSampleV1 = {
           // ...
         ],
         prevStep: {
-          state: {},
+          // at this prev step's state s2, if controllables picked the above actions, will result in the state s1
+          state: {
+            // id: s2
+          },
           prevSteps: []
         }
       }
@@ -120,14 +128,26 @@ const pzleSampleV1 = {
   },
 
   startState: {
-    // a state obj
+    // a state obj.
+    // used for telling unty/... how the pzle is, wt pzle to create at gm start
   },
   currState: {
+    // !!! remove this?
     // a state obj
+    // used for pzle validation
+    //   actually can still put this in a pzleGm class obj instead for pzle validation
+    // may also be used for simple js gm engine?
   }
 }
 class Pzle {
 
+}
+
+const pzleGmSample = {
+  currState: {
+    // a state obj
+    // may be used for simple js gm engine / unty js gm engine?
+  }
 }
 
 /*

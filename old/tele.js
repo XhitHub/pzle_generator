@@ -1,5 +1,3 @@
-const mu = require.main.require('./myUtil')
-
 class Tele {
   constructor(teleIn, teleOut, state) {
     this.teleIn = teleIn
@@ -13,35 +11,31 @@ class Tele {
   forward() {
     // if any tele-able obj in pzle is in this.teleIn, tele it/them to teleOut
     // modify registered state in place
-    var state2 = mu.deepClone(this.state)
-    [state2.controllables, state2.mechanics].forEach(
+    [this.state.controllables, this.state.mechanics].forEach(
       list => {
         list.forEach(
           item => {
-            if (isTeleable(item) && mu.areSamePos(item.pos, this.teleIn)) {
-              item.pos = mu.deepClone(this.teleOut)
+            if (isTeleable(item) && areSamePos(item.pos, this.teleIn)) {
+              item.pos = deepClone(this.teleOut)
             }
           }
         )
       }
     )
-    return state2
   }
 
   backward() {
-    var state2 = mu.deepClone(this.state)
-    [state2.controllables, state2.mechanics].forEach(
+    [this.state.controllables, this.state.mechanics].forEach(
       list => {
         list.forEach(
           item => {
-            if (isTeleable(item) && mu.areSamePos(item.pos, this.teleOut)) {
-              item.pos = mu.deepClone(this.teleIn)
+            if (isTeleable(item) && areSamePos(item.pos, this.teleOut)) {
+              item.pos = deepClone(this.teleIn)
             }
           }
         )
       }
     )
-    return state2
   }
 
   generatePrevStep(currState) {
@@ -53,12 +47,9 @@ class Tele {
     */
 
     // tele target: randomly pick 1 teleable obj
-    var target
-    // TODO
     // generate tele
     //   this.teleOut: target's pos
     //   this.teleIn: random valid pos
-    var tele = new Tele()
     // use generated tele's backward() to obtain passed in currState's prev state?
     // return prev state
   }
