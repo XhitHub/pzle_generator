@@ -50,6 +50,8 @@ class Tele {
     it is creating a step in a way in a path / reversedPath obj
     it can simply return a prev step, and let the parent func to handle the building of the big path obj.
       if prev step is given/obtained, building big path obj with the obtained prev step is same for any mechanics, thus should not be implemented in each mechanic individually
+    or return a prev state
+    or return a step obj, as it may involve data outside step obj
     */
 
     // tele target: randomly pick 1 teleable obj

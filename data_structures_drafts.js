@@ -40,6 +40,154 @@ const stateSampleV1 = {
     // env of the pzle curr state
   }
 }
+const stateSampleV2 = {
+  // lists of diff major types of things
+  mechanics: [
+    {
+      type: 'tele',
+      teleIn: {
+        x:1, y:1,
+      },
+      // ...
+    }
+  ],
+  controllables: [
+    {
+      // ...
+    }
+  ],
+  env: {
+    // env of the pzle curr state
+  },
+  prevState: {},
+
+}
+
+// linked list of steps as sol/path instead?
+const stepSampleV1 = {
+  state: {}, // state s1
+  nextSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2. at s1, there needs some periods of time for controllables to decide and set their actions
+      controllableActions: [
+        {
+          controllable: c1,
+          action: a1,
+        },
+      ],
+      state: {}, // state s2
+      nextSteps: [],
+    },
+    {
+      // auto go from s1 to s3 without needing any controllables do any actions
+      state: {}, // state s3
+      nextSteps: [],
+    },
+    {
+      // auto go from s1 to s3 without needing any controllables do any actions V2. or if in s1 no controllables do any actions, it will go to s3
+      controllableActions: [],
+      state: {}, // state s3
+      nextSteps: [],
+    }
+  ],
+  prevSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2
+      controllableActions: [
+        {
+          controllable: c1,
+          action: a1,
+        },
+      ],
+      state: {}, // state s2
+      prevSteps: [],
+    },
+    {
+      state: {},
+      prevSteps: [],
+    }
+  ],
+}
+
+// controllableActions included in state instead
+  /*
+  placement of controllableActions
+    place in prev state
+    
+    vs
+
+    place in same state
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: a1
+          },
+          // ...
+        ]
+        ... resulted state 
+      }
+    [ controllableActions separated out ] is a [ place in same state ] in fact
+  */
+// controllableActions place in same state
+const stepSampleV3 = {
+  state: {}, // state s1
+  nextSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2. at s1, there needs some periods of time for controllables to decide and set their actions
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: a1
+          },
+          // ...
+        ]
+        // ... modified state after the controllable's actions were done
+      }, // state s2
+      nextSteps: [],
+    },
+    {
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: null
+          },
+          // ...
+        ]
+        // ... go to s3 when no one do any actions
+      }, // state s3
+      nextSteps: [],
+    }
+  ]
+}
+// controllableActions place in prev state
+const stepSampleV2 = {
+  state: {}, // state s1
+  nextSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2. at s1, there needs some periods of time for controllables to decide and set their actions
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            action: a1
+          },
+          // ...
+        ]
+        // ... remaining parts of the state is same as s1
+      }, // state s2
+      nextSteps: [
+        {
+          state: {
+            // modified state after the controllable's actions were done
+          }
+        }
+      ],
+    },
+  ]
+}
 
 // pzle: puzzle
 const pzleSampleV1 = {
@@ -98,6 +246,37 @@ const pzleSampleV1 = {
 
   pathV2: {
     // controllable's actions to be normal facts
+    state: {
+      // ...
+    },
+    nextSteps: [
+      {
+        controllableActions: [
+          // it can be N controllables do diff actions to results in this next step
+          {
+            controllable: c1,
+            action: a1,
+          },
+          // ...
+        ],
+        nextStep: {
+          state: {
+            // ...
+          },
+          nextSteps: [
+            {
+              // some next step are purely mechanics auto executed, their controllableActions will be empty arr. nextSteps in such case should also have 1 item only.
+              controllableActions: [],
+              nextStep: {
+                // ...
+              }
+            }
+            // ...
+          ]
+        }
+      },
+      // ...
+    ]
   },
 
   reversedPathV1: {
@@ -125,6 +304,24 @@ const pzleSampleV1 = {
         }
       }
     ]
+  },
+
+  reversedPathV2: {
+    // is end state obj. state obj to be linked list with next and prev
+    mechanics: [],
+    // ...
+    prevState: {
+      mechanics: [],
+      // ...
+      prevState: {
+        // ...
+      }
+    }
+  },
+
+  pathV3: {
+    // state obj to be linked list with next and prev.
+    // put end state and start state in it
   },
 
   startState: {
