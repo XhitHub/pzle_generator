@@ -130,6 +130,10 @@ const stepSampleV1 = {
     [ controllableActions separated out ] is a [ place in same state ] in fact
   */
 // controllableActions place in same state
+/*
+can directly build forwarding steps with generating prev step?
+      should can: create prev step, put curr step into the prev step's nextSteps single entry
+*/
 const stepSampleV3 = {
   state: {}, // state s1
   nextSteps: [

@@ -44,31 +44,49 @@ class Tele {
     return state2
   }
 
-  generatePrevStep(currState) {
-    /*
-    randomly create a mechanic of this type, with its attrs ics such that the pzle's prev step has its state results in currState with this mechanic instance involved
-    it is creating a step in a way in a path / reversedPath obj
-    it can simply return a prev step, and let the parent func to handle the building of the big path obj.
-      if prev step is given/obtained, building big path obj with the obtained prev step is same for any mechanics, thus should not be implemented in each mechanic individually
-    or return a prev state
-    or return a step obj, as it may involve data outside step obj
-    */
-
-    // tele target: randomly pick 1 teleable obj
-    var target
-    // TODO
-    // generate tele
-    //   this.teleOut: target's pos
-    //   this.teleIn: random valid pos
-    var tele = new Tele()
-    // use generated tele's backward() to obtain passed in currState's prev state?
-    // return prev state
-  }
-
   // class specific funcs
   isTeleable(item) {
     return item.isTeleable
   }
+}
+
+// generate this mechanic/... and prev step. is previously "generatePrevStep" in the Tele class
+const generatePrevStep = (currStep) => {
+  /*
+  randomly create a mechanic of this type, with its attrs ics such that the pzle's prev step has its state results in currState with this mechanic instance involved
+  it is creating a step in a way in a path / reversedPath obj
+  it can simply return a prev step, and let the parent func to handle the building of the big path obj.
+    if prev step is given/obtained, building big path obj with the obtained prev step is same for any mechanics, thus should not be implemented in each mechanic individually
+  or return a prev state
+  or return a step obj, as it may involve data outside step obj
+    this allows more flexibility
+  */
+
+  // tele target: randomly pick 1 teleable obj
+  var currState = currStep.state
+  var teleables = currState.controllables.filter( item => item.isTeleable)
+  var target = mu.getRandomItem(teleables)
+  
+  // generate tele
+  //   this.teleOut: target's pos
+  //   this.teleIn: random valid pos
+  var teleIn = mu.getRandomPos()
+  var teleOut = target.pos
+  var tele = new Tele(teleIn, teleOut, currState)
+
+  // use generated tele's backward() to obtain passed in currState's prev state?
+  var prevStepState = tele.backward()
+  var prevStep = {
+    state: prevStepState,
+    nextSteps: [
+      currStep
+    ]
+  }
+  // return prev step
+  return prevStep
+}
+
+const generateNextStep = (currStep) => {
 }
 
 /*
@@ -79,3 +97,6 @@ notes
   can be just generate steps, where some steps are automated mechanics executions, some steps are actions (user triggered actions)
     user actions to be of same interface as mechanics, with forward(), backward(), generatePrevStep()
 */
+
+const teleGen = { generateNextStep, generatePrevStep }
+module.exports = teleGen

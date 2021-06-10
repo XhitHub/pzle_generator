@@ -20,6 +20,9 @@ const controllableSample = {
       }
     }
   },
+  pos: {
+    x:2, y:2
+  },
   isTeleable: true,
 }
 
@@ -41,72 +44,63 @@ const stateSample = {
   ],
   env: {
     // env of the pzle curr state
+    // any env that may change should be placed here?
+    dimension: {
+      x: 40,
+      y: 40,
+      // xMin: -10,
+      // xMax: 10,
+      // yMin: -10,
+      // yMax: 10,
+    }
   }
+}
+
+const stepSampleV3 = {
+  state: {}, // state s1
+  nextSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2. at s1, there needs some periods of time for controllables to decide and set their actions
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: a1
+          },
+          // ...
+        ]
+        // ... modified state after the controllable's actions were done
+      }, // state s2
+      nextSteps: [],
+    },
+    {
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: null
+          },
+          // ...
+        ]
+        // ... go to s3 when no one do any actions
+      }, // state s3
+      nextSteps: [],
+    }
+  ]
 }
 
 
 // pzle: puzzle
 const pzleSampleV1 = {
-  pathV1: {
-    state: {
-      // ...
-    },
-    nextSteps: [
-      {
-        controllableActions: [
-          // it can be N controllables do diff actions to results in this next step
-          {
-            controllable: c1,
-            action: a1,
-          },
-          // ...
-        ],
-        nextStep: {
-          state: {
-            // ...
-          },
-          nextSteps: [
-            {
-              // some next step are purely mechanics auto executed, their controllableActions will be empty arr. nextSteps in such case should also have 1 item only.
-              controllableActions: [],
-              nextStep: {
-                // ...
-              }
-            }
-            // ...
-          ]
-        }
-      },
-      // ...
-    ]
-  },
-
-  reversedPathV1: {
-    // from end state to start state. this is obj that will be generated in [ generating sol from end state ]. forward version should can be generated from this
-    state: {
-      // ...
-    },
-    prevSteps: [
-      {
-        controllableActions: [
-          // it can be N controllables do diff actions to results in this next step
-          {
-            controllable: c1,
-            action: a1,
-          },
-          // ...
-        ],
-        prevStep: {
-          state: {},
-          prevSteps: []
-        }
-      }
-    ]
+  path: {
+    // a step obj linked list, of forwarding direction starting from 1st step
+    // this obj is 1st step obj, with nextSteps
   },
 
   startState: {
     // a state obj.
     // used for telling unty/... how the pzle is, wt pzle to create at gm start
+    // may remove this as path's start step state is already the start state
   },
 }
 
