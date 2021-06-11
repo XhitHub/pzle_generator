@@ -133,6 +133,15 @@ const stepSampleV1 = {
 /*
 can directly build forwarding steps with generating prev step?
       should can: create prev step, put curr step into the prev step's nextSteps single entry
+
+Problems:
+  newly added mechanic/... is not included in previously generated next steps
+      place mechanics in steps independent storage?
+        no as some mechanics may change over steps, e.g. get teled away, get destroyed, ...
+      directly add them in next steps states?
+        no as some mechanics may be interacted and not the same in later steps states
+      add by re-calculate/inference next steps states
+        needed as need to verify [ end step can still be reached ] anyway
 */
 const stepSampleV3 = {
   state: {}, // state s1
@@ -351,8 +360,46 @@ const pzleGmSample = {
   }
 }
 
+const pzleV3_inplace = {
+  state: {
+    // state obj, inplace modify, units inside are obj with func constructed by constructors
+  },
+  steps: {
+    // steps data outside of state, e.g. controllables actions done
+    // linked list, so that easier access in either direction
+  }
+}
+
 /*
 have data structures of pzle, state, action, ... be well defined to know how the generators should be generating diff things
 generate from end state vs generate from start state
   generate from end state can ensure gd end state, e.g. consistent end state with certain format / characteristics
+
+resolving cloning issues
+1
+  no cloning
+    in-place modify
+      clone plain obj end state at start
+      at each gen prev step:
+        directly in-place modify curr state
+        validation
+          forward to end state
+            check end state with endStateCheck() defined (which should check for parts of state)
+          backward back to begining
+        store non state data in steps
+
+problem: cannot generate pzle that involves parallel events that may affect each others
+  e.g. a unit moving while a mech may block its pathway
+  solution
+    process in mini steps, breakdown up to steps that something is possible to happen
+    if the paralle affecting is intended
+      it can be generated normally
+    if the paralle affecting is not intended
+      it can be detected by forward validation?
+        forward validation must be done in mini steps in order to detect for accidental affectings
+          things like path findings need to be done if so
+          or can be done in gm engine?
+
+ensuring match fairness
+  identical state for all competing groups
 */

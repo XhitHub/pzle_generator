@@ -24,6 +24,7 @@ const getRandomItem = arr => {
 }
 
 const getRandomPos = state => {
+  console.log("state", state)
   // not all pzles are simple rect map. this myUtil is actually [ simple 2D rect map pzle ]
   var xHalf = state.env.dimension.x/2
   var yHalf = state.env.dimension.y/2

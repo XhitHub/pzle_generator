@@ -20,11 +20,11 @@ class Tele {
   }
 
   // compulsory funcs
-  forward(pzle) {
+  forward(state) {
     // if any tele-able obj in pzle is in this.teleIn, tele it/them to teleOut
     // modify registered state in place
-    var state = pzle.state
-    var arr = [state.controllables, state.mechanics]
+    var state2 = mu.deepClone(state)
+    var arr = [state2.controllables, state2.mechanics]
     arr.forEach(
       list => {
         list.forEach(
@@ -36,40 +36,47 @@ class Tele {
         )
       }
     )
-    // add empty step? but in non pzle generating usage it should not add steps. put add step in generator instead?
-    // pzle.steps
+    return state2
   }
 
-  backward(pzle) {
+  backward(state) {
     // should not operate on a fixed this.state, as the mechanic will be used in other steps too
-    var state = pzle.state
-    var arr = [state.controllables, state.mechanics]
+    var state2 = mu.deepClone(state)
+    var arr = [state2.controllables, state2.mechanics]
     arr.forEach(
       list => {
-        var filteredList = list.filter(item2 => this.isTeleable(item2))
-        console.log("Tele -> backward -> filteredList", filteredList)
-        filteredList.forEach(
+        list.forEach(
           item => {
-            console.log("Tele -> backward -> item", item)
-            if (mu.areSamePos(item.pos, this.teleOut)) {
+            if (this.isTeleable(item) && mu.areSamePos(item.pos, this.teleOut)) {
               item.pos = mu.deepClone(this.teleIn)
             }
           }
         )
       }
     )
+    return state2
   }
 
   // class specific funcs
   isTeleable(item) {
-    return item.isTeleable == true
+    return item.isTeleable
   }
 }
 
 // generate this mechanic/... and prev step. is previously "generatePrevStep" in the Tele class
-const generatePrevStep = (pzle) => {
+const generatePrevStep = (currStep) => {
+  /*
+  randomly create a mechanic of this type, with its attrs ics such that the pzle's prev step has its state results in currState with this mechanic instance involved
+  it is creating a step in a way in a path / reversedPath obj
+  it can simply return a prev step, and let the parent func to handle the building of the big path obj.
+    if prev step is given/obtained, building big path obj with the obtained prev step is same for any mechanics, thus should not be implemented in each mechanic individually
+  or return a prev state
+  or return a step obj, as it may involve data outside step obj
+    this allows more flexibility
+  */
+
   // tele target: randomly pick 1 teleable obj
-  var currState = pzle.state
+  var currState = currStep.state
   var teleables = currState.controllables.filter( item => item.isTeleable)
   var target = mu.getRandomItem(teleables)
   
@@ -82,16 +89,16 @@ const generatePrevStep = (pzle) => {
   tele.register(currState)
   console.log("generatePrevStep -> tele", tele)
 
-  // use generated tele's backward() to determ pzle state's prev state?
-  tele.backward(pzle)
-  
-  // update pzle steps
-  var tempSteps = pzle.steps
-  pzle.steps = {
-    //empty curr step as there is no data outside state needed
-    controllableActions: [],
-    nextStep:tempSteps
+  // use generated tele's backward() to obtain passed in currState's prev state?
+  var prevStepState = tele.backward(currState)
+  var prevStep = {
+    state: prevStepState,
+    nextSteps: [
+      currStep
+    ]
   }
+  // return prev step
+  return prevStep
 }
 
 const generateNextStep = (currStep) => {

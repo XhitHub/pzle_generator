@@ -8,37 +8,46 @@ const mu = require.main.require('./myUtil')
 
 class PzleGenerator {
   constructor() {
-    this.generators = [
+    this.stepGenerators = [
       teleGen
     ]
-    console.log("PzleGenerator -> constructor -> this.generators", this.generators)
+    console.log("PzleGenerator -> constructor -> this.stepGenerators", this.stepGenerators)
   }
   
   
   generatePzleFromEndState(endState, solutionStepsCount) {
-    // in-place modify
-    //   clone plain obj end state at start
-    //   at each gen prev step:
-    //     directly in-place modify curr state
-    //     validation
-    //       forward to end state
-    //         check end state with endStateCheck() defined (which should check for parts of state)
-    //       backward back to begining
-    //     store non state data in steps
-    var endStateClone = mu.deepClone(endState)
-    var pzle = {
-      state: endState,
-      // steps: {}
+    var currStep = {
+      state: endState
     }
+    var stepGenerator;
+    var tempStep;
+
     // generate solution
-    var stepGenerator
-    var tempStep
     for(var i=0; i<solutionStepsCount; i++) {
-      stepGenerator = mu.getRandomItem(this.generators)
+      stepGenerator = mu.getRandomItem(this.stepGenerators)
       console.log("PzleGenerator -> generatePzleFromEndState -> stepGenerator", stepGenerator)
-      tempStep = stepGenerator.generatePrevStep(pzle)
+      tempStep = stepGenerator.generatePrevStep(currStep)
+
+      // re-calculate/inference/forward steps upon new generated prev step, as new thing is added, next steps have changed
+        // if prev step is action it may not need as next steps won't get changed
+          // generator should indicate whether a re-cal is needed?
+      // validate tempStep, see if it can be forwarded to endState
+
+      // need to handle invalid tempStep
+
+      // if valid, set tempStep as currStep
+      currStep = tempStep
     }
-    console.log("PzleGenerator -> generatePzleFromEndState -> pzle", pzle)
+
+    // generate failure paths
+
+    return {
+      path: currStep
+    }
+  }
+
+  activateState(state) {
+    // problem: cannot know which class to use to construct using the plain obj
   }
 
   pathForwardRecalculation(startStep, plannedPath) {

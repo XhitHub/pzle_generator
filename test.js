@@ -30,7 +30,7 @@ var endState = {
         x: 0,
         y: 0,
       },
-      teleable: true,
+      isTeleable: true,
     }
   ],
   env: {

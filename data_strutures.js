@@ -104,3 +104,14 @@ const pzleSampleV1 = {
   },
 }
 
+// pzle: in-place state modification
+const pzleV3_inplace = {
+  state: {
+    // state obj, inplace modify, units inside are obj with func constructed by constructors
+  },
+  steps: {
+    // steps data outside of state, e.g. controllables actions done
+    // linked list, so that easier access in either direction
+  }
+}
+
