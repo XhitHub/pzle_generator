@@ -32,13 +32,26 @@ class PzleGenerator {
     }
     // generate solution
     var stepGenerator
-    var tempStep
     for(var i=0; i<solutionStepsCount; i++) {
       stepGenerator = mu.getRandomItem(this.generators)
       console.log("PzleGenerator -> generatePzleFromEndState -> stepGenerator", stepGenerator)
-      tempStep = stepGenerator.generatePrevStep(pzle)
+      stepGenerator.generatePrevStep(pzle)
     }
     console.log("PzleGenerator -> generatePzleFromEndState -> pzle", pzle)
+  }
+
+  addPrevStep(pzle, endStateClone, endStateCheck, stepGenerator) {
+    // generate prev step
+    stepGenerator.generatePrevStep(pzle)
+    // validate the generation: forwardly do all generated steps (stored in steps of pzle obj), check if proper/planned end state can be reached
+  }
+
+  forwardToEnd(pzle) {
+    // forward pzle to end step
+  }
+
+  backwardToStart(pzle) {
+    // backward pzle to start step
   }
 
   pathForwardRecalculation(startStep, plannedPath) {

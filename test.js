@@ -1,5 +1,7 @@
 const mu = require.main.require('./myUtil')
-const PzleGenerator = require.main.require('./PzleGenerator')
+// const PzleGenerator = require.main.require('./PzleGenerator')
+const Pzle = require.main.require('./Pzle')
+const teleGen = require.main.require('./mechanics/Tele')
 // t1
 // console.log("mu", mu)
 
@@ -15,11 +17,6 @@ const PzleGenerator = require.main.require('./PzleGenerator')
 // console.log("o2", o2)
 
 
-
-// t2
-const pg = new PzleGenerator()
-
-var solutionStepsCount = 10
 var endState = {
   mechanics: [
   ],
@@ -40,7 +37,21 @@ var endState = {
     }
   }
 }
+var solutionStepsCount = 10
 
-var pz = pg.generatePzleFromEndState(endState, solutionStepsCount)
+// // t2
+// const pg = new PzleGenerator()
+// var pz = pg.generatePzleFromEndState(endState, solutionStepsCount)
 
-console.log(pz)
+// console.log(pz)
+
+// t3
+const stepGenerators = [teleGen]
+const endStateCheck = (actualState, goalState) => {
+  var cA = actualState.controllables.find(item => item.id == 'c1')
+  var cG = goalState.controllables.find(item => item.id == 'c1')
+  return mu.areSamePos(cA.pos, cG.pos)
+}
+const pz = new Pzle(endState, endStateCheck, stepGenerators)
+pz.generatePzle(solutionStepsCount)
+console.log(pz.state)

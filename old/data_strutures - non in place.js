@@ -56,17 +56,37 @@ const stateSample = {
   }
 }
 
-const stepSample = {
-  nextStep: {
-    // another step obj
-  },
-  prevStep: {
-    // another step obj
-    // problem: circular, cannot export JSON
-      // sol: have func for generating a non circulating version. or actually exporting of steps actions is not necessary?
-  },
-  // step data
-  controllableActions: [],
+const stepSampleV3 = {
+  state: {}, // state s1
+  nextSteps: [
+    {
+      // if controllables do such actions in state s1, will results in state s2. at s1, there needs some periods of time for controllables to decide and set their actions
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: a1
+          },
+          // ...
+        ]
+        // ... modified state after the controllable's actions were done
+      }, // state s2
+      nextSteps: [],
+    },
+    {
+      state: {
+        controllables: [
+          // controllableActions included in state here
+          {
+            actionDone: null
+          },
+          // ...
+        ]
+        // ... go to s3 when no one do any actions
+      }, // state s3
+      nextSteps: [],
+    }
+  ]
 }
 
 
@@ -85,33 +105,14 @@ const pzleSampleV1 = {
 }
 
 // pzle: in-place state modification
-/*
-in-place poss problems:
-  wt if some units were destroyed in some steps
-    use status label instead of real deleting related objs
-  why actionDone cannot be stored in in-place modifying state
-    actionDone of prev steps gets overwritten by currStep, data is loss
-    are there similar problems for mechs too?
-*/
 const pzleV3_inplace = {
-  // seems should have a pzle class instead
   state: {
-    // state obj, inplace modify (so it is a curr state obj in fact), units inside are obj with func constructed by constructors
-  },
-  currStep: {
-    // currStep being navigated to in steps. navigate with state obj. so that can do forward, backward properly
-    // do curr step's things (controllable actions / ...) and exec mechanics to results in next state
+    // state obj, inplace modify, units inside are obj with func constructed by constructors
   },
   steps: {
     // steps data outside of state, e.g. controllables actions done
     // linked list, so that easier access in either direction
     // start from 1st step ( forward direction linked list )
-  },
-  endStateClone: {
-    // end state's clone for checking. or just use endStateCheck is enough?
-  },
-  endStateCheck: () => {
-    // endStateCheck func
-  },
+  }
 }
 

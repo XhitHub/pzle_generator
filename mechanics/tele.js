@@ -86,15 +86,23 @@ const generatePrevStep = (pzle) => {
   tele.backward(pzle)
   
   // update pzle steps
-  var tempSteps = pzle.steps
+  var tempStep = pzle.currStep
   pzle.steps = {
     //empty curr step as there is no data outside state needed
     controllableActions: [],
-    nextStep:tempSteps
+    // if curr step is null, then nextStep is null ( no next step )
+    nextStep: tempStep
   }
+  pzle.currStep = pzle.steps
+  tempStep.prevStep = pzle.currStep
 }
 
-const generateNextStep = (currStep) => {
+const undoGeneratePrevStep = (pzle) => {
+  pzle.state.mechanics.pop()
+  pzle.undoGeneratePrevStep()
+}
+
+const generateNextStep = (pzle) => {
 }
 
 /*
@@ -106,5 +114,10 @@ notes
     user actions to be of same interface as mechanics, with forward(), backward(), generatePrevStep()
 */
 
-const teleGen = { generateNextStep, generatePrevStep }
-module.exports = teleGen
+const stepGen = { 
+  generateNextStep, 
+  generatePrevStep,
+  undoGeneratePrevStep,
+  needEndCheck: true,
+}
+module.exports = stepGen
