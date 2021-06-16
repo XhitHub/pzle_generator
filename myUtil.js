@@ -17,14 +17,14 @@ const getRandomItem = arr => {
   res = null
   if (arr.length > 0) {
     var i = randomInt(0, arr.length)
-    console.log("i", i)
+    // console.log("i", i)
     res = arr[i]
   }
   return res
 }
 
 const getRandomPos = state => {
-  console.log("state", state)
+  // console.log("state", state)
   // not all pzles are simple rect map. this myUtil is actually [ simple 2D rect map pzle ]
   var xHalf = state.env.dimension.x/2
   var yHalf = state.env.dimension.y/2

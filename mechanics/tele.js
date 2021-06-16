@@ -47,10 +47,10 @@ class Tele {
     arr.forEach(
       list => {
         var filteredList = list.filter(item2 => this.isTeleable(item2))
-        console.log("Tele -> backward -> filteredList", filteredList)
+        // console.log("Tele -> backward -> filteredList", filteredList)
         filteredList.forEach(
           item => {
-            console.log("Tele -> backward -> item", item)
+            // console.log("Tele -> backward -> item", item)
             if (mu.areSamePos(item.pos, this.teleOut)) {
               item.pos = mu.deepClone(this.teleIn)
             }
@@ -79,8 +79,10 @@ const generatePrevStep = (pzle) => {
   var teleIn = mu.getRandomPos(currState)
   var teleOut = target.pos
   var tele = new Tele({teleIn, teleOut})
+  console.log("generatePrevStep -> tele", JSON.stringify(tele))
+  
   tele.register(currState)
-  console.log("generatePrevStep -> tele", tele)
+  // console.log("generatePrevStep -> tele", tele)
 
   // use generated tele's backward() to determ pzle state's prev state?
   tele.backward(pzle)

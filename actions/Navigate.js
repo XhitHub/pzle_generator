@@ -23,3 +23,26 @@ class Navigate{
     }
   }
 }
+
+const generatePrevStep = (pzle) => {
+  // random pick 1 controllable
+  var c = mu.getRandomItem(pzle.state.controllables)
+  var navAction = new Navigate({
+    posFrom: mu.getRandomPos(pzle.state),
+    posTo: mu.deepClone(c.pos)
+  })
+  console.log("generatePrevStep -> navAction", JSON.stringify(navAction))
+  navAction.register(c)
+  navAction.backward(pzle)
+  pzle.addPrevStep({
+    controllableActions: [
+      navAction
+    ]
+  })
+}
+
+const stepGen = { 
+  generatePrevStep,
+  needEndCheck: false,
+}
+module.exports = stepGen

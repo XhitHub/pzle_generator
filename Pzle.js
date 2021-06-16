@@ -19,8 +19,8 @@ class Pzle {
     var stepGenerator
     while (count > 0) {
       // check curr pzle
-      console.log('@generatePzle count', count)
-      console.log('@generatePzle this.state', this.state)
+      // console.log('@generatePzle count', count)
+      // console.log('@generatePzle this.state', this.state)
       // gen prev step
       stepGenerator = mu.getRandomItem(this.stepGenerators)
       stepGenerator.generatePrevStep(this)
@@ -38,7 +38,14 @@ class Pzle {
         count -= 1
       }
     }
-    console.log('@generatePzle end count', count)
+    // console.log('@generatePzle end count', count)
+  }
+
+  addPrevStep(rawPrevStep) {
+    rawPrevStep.nextStep = this.currStep
+    this.currStep.prevStep = rawPrevStep
+    this.currStep = rawPrevStep
+    this.steps = rawPrevStep
   }
 
   undoGeneratePrevStep() {

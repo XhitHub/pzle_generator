@@ -2,6 +2,7 @@ const mu = require.main.require('./myUtil')
 // const PzleGenerator = require.main.require('./PzleGenerator')
 const Pzle = require.main.require('./Pzle')
 const teleGen = require.main.require('./mechanics/Tele')
+const navGen = require.main.require('./actions/Navigate')
 // t1
 // console.log("mu", mu)
 
@@ -46,7 +47,7 @@ var solutionStepsCount = 10
 // console.log(pz)
 
 // t3
-const stepGenerators = [teleGen]
+const stepGenerators = [teleGen, navGen]
 const endStateCheck = (actualState, goalState) => {
   var cA = actualState.controllables.find(item => item.id == 'c1')
   var cG = goalState.controllables.find(item => item.id == 'c1')
